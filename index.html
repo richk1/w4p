@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Worksheet 1-B (W-4P Calculator)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>Withholding Calculator for Pensions and Annuities (W-4P)</h1>
+  <main class="container">
+
+    <div class="inputs">
+      <section class="filing-info">
+        <label>Tax Year
+          <select id="taxYear">
+            <option>2026</option>
+            <option>2025</option>
+            <option>2024</option>
+            <option>2023</option>
+          </select>
+        </label>
+
+        <label>Filing Status
+          <select id="filingStatus">
+            <option value="Single">Single</option>
+            <option value="MarriedFilingSeparately">Married Filing Separately</option>
+            <option value="MarriedFilingJointly">Married Filing Jointly</option>
+            <option value="HeadOfHousehold">Head Of Household</option>
+            <option value="QualifyingWidow">Qualifying Widow</option>
+          </select>
+        </label>
+      </section>
+
+      <fieldset class="pension-info">
+        <legend>Pension / Annuity Payments</legend>
+        <label>Amount
+          <input id="paymentAmount" type="number" step="0.01" value="0.00" />
+        </label>
+        <label>Frequency
+          <select id="period">
+            <option value="monthly">monthly</option>
+            <option value="semimonthly">semimonthly</option>
+            <option value="biweekly">biweekly</option>
+            <option value="weekly">weekly</option>
+            <option value="daily">daily</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset class="w4p-section">
+        <legend>Form W-4P Information</legend>
+        <label class="checkbox">
+          <input id="hasW4P" type="checkbox" checked /> Using a 2022-or-later Form W-4P
+        </label>
+
+        <div id="w4pPanel" class="panel">
+          <span>W-4P values (use 0 for none)</span>
+          <label>2.b3 Other earned/pension income
+            <input id="w4p_2b3" type="number" step="0.01" value="0.00" />
+          </label>
+          <label>3. Credits
+            <input id="w4p_3" type="number" step="0.01" value="0.00" />
+          </label>
+          <label>4.a Other income (Investment, etc.)
+            <input id="w4p_4a" type="number" step="0.01" value="0.00" />
+          </label>
+          <label>4.b Deductions
+            <input id="w4p_4b" type="number" step="0.01" value="0.00" />
+          </label>
+          <label>4.c Extra withholding per payment
+            <input id="w4p_4c" type="number" step="0.01" value="0.00" />
+          </label>
+        </div>
+
+        <div id="noW4pPanel" class="panel hidden">
+          <p>No recent W-4P on file. Enter allowances claimed on most recent W-4P.</p>
+          <label>Allowances claimed
+            <input id="allowances" type="number" value="0" />
+          </label>
+        </div>
+      </fieldset>
+
+      <button id="computeBtn">Compute Withholding</button>
+    </div>
+
+    <div class="outputs">
+      <fieldset class="result">
+        <legend>Computed Withholding Result </legend>
+        <span id="withholdingAmount" class="currency">0.00</span>
+      </fieldset>
+      <fieldset id="result-text">
+        <legend><label for="toggle">Completed Worksheet</label></legend>
+        <input id="toggle" type="checkbox" checked="false"/>
+        <textarea id="outputBox" readonly></textarea>
+      </fieldset>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

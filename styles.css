@@ -1,0 +1,115 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+:root{
+  --br:6px;
+  --gap:12px;
+  --panel-bg:#f6f6f8;
+  --muted:#666;
+  --accent:#1266f1;
+}
+
+body{
+  font-family:Segoe UI, Roboto, Arial, sans-serif;
+  margin:24px;
+  background:#fff;
+  color:#111;
+}
+
+.container{
+  display:grid;
+  grid-template-columns: 300px 1fr;
+  gap:var(--gap);
+  align-items:start;
+  min-height: calc(100vh - 48px);
+}
+
+.inputs {
+  grid-column: 1;
+  display:flex;
+  flex-direction:column;
+  gap:var(--gap);
+}
+.outputs {
+  grid-column: 2;
+  display:flex;
+  flex-direction:column;
+  gap:var(--gap);
+  align-items: stretch;
+  margin-top: 6px;
+  min-height: 0;
+}
+
+h1{ margin:0 0 12px 0; font-size:1.1rem; text-align: center;white-space: nowrap;}
+legend{ white-space: nowrap; overflow: hidden;}
+
+.filing-info{ display:flex; gap:12px; margin-bottom:0px; align-items:center; }
+.filing-info label{ display:flex; flex-direction:column; font-size:0.9rem; }
+
+.pension-info{ 
+  padding:10px; background:var(--panel-bg); border-radius:var(--br); 
+  margin-bottom:8px; font-size: small;
+}
+.pension-info label { margin-right:12px; display:inline-block; max-width: 100px;}
+#paymentAmount{ max-width:100%; }
+
+.w4p-section{ display:flex; flex-direction:column; gap:8px; padding:6px; 
+  background:var(--panel-bg); border-radius:var(--br); }
+
+.panel{ background:#fff; border:1px solid #e3e3e3; padding:8px; border-radius:var(--br); display:flex; flex-direction:column; gap:8px; }
+.panel label{ display:flex; flex-direction:column; font-size:0.9rem; }
+.hidden{ display:none; }
+
+.checkbox{ display:flex; align-items:center; gap:8px; font-weight:600; }
+
+#computeBtn{ background:var(--accent); color:white; border:none; padding:10px 12px; border-radius:var(--br); cursor:pointer; }
+#computeBtn:active{ transform:translateY(1px); }
+
+.result{ font-weight: 500; border-radius: var(--br); border-style: solid; background:var(--panel-bg);}
+.currency{ font-weight:200; margin-top:6px; }
+
+.outputs label {
+  font-size:1rem;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+#result-text {
+  border-radius: var(--br);
+  border-style: solid;
+  background:var(--panel-bg);
+}
+#result-text legend label {
+  display: inline-block;
+  padding: 6px 12px;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  background: #007bff;
+}
+#toggle { display:none; }
+#toggle:checked + #outputBox {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+#outputBox {
+  opacity: 1;
+  flex: 1 1 auto; 
+  min-height: 0;
+  max-height: 1000px;
+  width: 100%;
+  white-space: pre;
+  font-family: Consolas, monospace;
+  font-size: small;
+  background: #fafafa;
+  border: none;
+  resize: vertical;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
