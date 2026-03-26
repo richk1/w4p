@@ -53,7 +53,7 @@ body {
 }
 
 /* Regions */
-.header { grid-area: header; }
+.header { grid-area: header; white-space: wrap;}
 
 .inputs {
   grid-area: form;

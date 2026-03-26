@@ -298,6 +298,42 @@
     el.style.height = el.scrollHeight + 'px';
   }
 
+  // Validation helpers for dollar/cents inputs (non-negative, up to 2 decimals)
+  function sanitizeNumberString(s){
+    if (s === undefined || s === null) return '';
+    return String(s).trim().replace(/,/g, '');
+  }
+  function isValidDollarAmountString(s){
+    s = sanitizeNumberString(s);
+    // Accept forms: "123", "123.4", "123.45", ".50"
+    return /^(\d+(\.\d{1,2})?|\.\d{1,2})$/.test(s);
+  }
+  function markInvalid(elm, invalid){
+    if (!elm) return;
+    if (invalid){
+      elm.classList.add('invalid-input');
+      elm.style.border = '1px solid #d33';
+      elm.title = 'Enter a non-negative dollar amount (dollars and optional cents, up to 2 decimals)';
+    } else {
+      elm.classList.remove('invalid-input');
+      elm.style.border = '';
+      elm.title = '';
+    }
+  }
+  function parseCurrencyInputById(id){
+    const input = el(id);
+    if (!input) return null;
+    const raw = input.value;
+    const s = sanitizeNumberString(raw);
+    if (!isValidDollarAmountString(s)){
+      markInvalid(input, true);
+      return null;
+    }
+    markInvalid(input, false);
+    // parseFloat handles leading ".50" correctly
+    return parseFloat(s);
+  }
+
   // UI wiring
   function init(){
     const hasW4P = el('hasW4P');
@@ -306,6 +342,10 @@
     hasW4P.addEventListener('change', () => {
       if (hasW4P.checked) { w4pPanel.classList.remove('hidden'); noW4pPanel.classList.add('hidden'); }
       else { w4pPanel.classList.add('hidden'); noW4pPanel.classList.remove('hidden'); }
+      // clear validation markers when toggling
+      ['w4p_2b3','w4p_3','w4p_4a','w4p_4b','w4p_4c'].forEach(id => {
+        const i = el(id); if (i) markInvalid(i, false);
+      });
     });
     
     const out = el('worksheetTA');
@@ -325,13 +365,35 @@
         let w4p = null;
         let allowances = 0;
         if (hasW4P.checked) {
+          // Validate W-4P dollar/cents inputs
+          const fieldIds = ['w4p_2b3','w4p_3','w4p_4a','w4p_4b','w4p_4c'];
+          const parsed = {};
+          const invalidFields = [];
+          fieldIds.forEach(id => {
+            const val = parseCurrencyInputById(id);
+            if (val === null) invalidFields.push(id);
+            else parsed[id] = val;
+          });
+          if (invalidFields.length > 0){
+            const friendly = invalidFields.map(id => {
+              if (id === 'w4p_2b3') return '2.b3 Other earned/pension income';
+              if (id === 'w4p_3') return '3. Credits';
+              if (id === 'w4p_4a') return '4.a Other income';
+              if (id === 'w4p_4b') return '4.b Deductions';
+              if (id === 'w4p_4c') return '4.c Extra withholding';
+              return id;
+            }).join(', ');
+            alert('Please correct the following W-4P fields to be valid dollar amounts (dollars and optional cents): ' + friendly);
+            return;
+          }
+
           w4p = {
             FilingStatus: filingStatus,
-            OtherEarnedOrPensionIncome: toNumber(el('w4p_2b3').value),
-            Credits: toNumber(el('w4p_3').value),
-            OtherIncome: toNumber(el('w4p_4a').value),
-            Deductions: toNumber(el('w4p_4b').value),
-            ExtraWithholding: toNumber(el('w4p_4c').value)
+            OtherEarnedOrPensionIncome: parsed['w4p_2b3'] || 0,
+            Credits: parsed['w4p_3'] || 0,
+            OtherIncome: parsed['w4p_4a'] || 0,
+            Deductions: parsed['w4p_4b'] || 0,
+            ExtraWithholding: parsed['w4p_4c'] || 0
           };
         } else {
           allowances = parseInt(el('allowances').value) || 0;
