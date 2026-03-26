@@ -56,6 +56,23 @@
       rate: [0, 0.10, 0.12, 0.22, 0.24, 0.32, 0.35, 0.37]
     }
   };
+  const WithholdingTables2023 = {
+    Single: {
+      bracketin: [0, 5250, 16250, 49975, 100625, 187350, 236500, 583375],
+      baseTax: [0, 0, 1100, 5147, 16290, 37104, 52832, 174238.25],
+      rate: [0, 0.10, 0.12, 0.22, 0.24, 0.32, 0.35, 0.37]
+    },
+    MarriedFilingJointly: {
+      bracketMin: [0, 14800, 36800, 104250, 205550, 379000, 477300, 708550],
+      baseTax: [0, 0, 2200, 10294, 32580, 74208, 105664, 186601.50],
+      rate: [0, 0.10, 0.12, 0.22, 0.24, 0.32, 0.35, 0.37]
+    },
+    HeadOfHousehold: {
+      bracketMin: [0, 12200, 27900, 72050, 107550, 194300, 243450, 590300],
+      baseTax: [0, 0, 1570, 6868, 14678, 35498, 51226, 172623.50],
+      rate: [0, 0.10, 0.12, 0.22, 0.24, 0.32, 0.35, 0.37]
+    }
+  };
 
   // Helpers
   function el(id){ return document.getElementById(id); }
@@ -78,7 +95,8 @@
   // Get withholding table for a filing status (map MFS -> Single, QualifyingWidow -> MFJ)
   function getWithholdingTable(filingStatus, taxYear){
     let tables;
-    if (taxYear === 2024) tables = WithholdingTables2025;
+    if (taxYear === 2023) tables = WithholdingTables2023;
+    else if (taxYear === 2024) tables = WithholdingTables2024;
     else if (taxYear === 2025) tables = WithholdingTables2025;
     else if (taxYear === 2026) tables = WithholdingTables2026;
     else {
@@ -107,11 +125,12 @@
     return { incomeBase: table.bracketMin[n], incomeLimit: Infinity, baseTax: table.baseTax[n], marginalRate: table.rate[n] };
   }
 
-  // Format result text similar to C# AsString
+  // Reformat the line entries (label,value) into a text block with right-aligned values and left-aligned labels
   function formatEntries(entries){
     const lines = [];
     const valueWidth = 12;
-    const numericLike = s => /^[\s\-]?[0-9\.,]+%?$/.test(s);
+	const numericLike = s => /^[\s\-]?\d*[\.,]?\d+%?$/.test(s);
+    //const numericLike = s => /^[\s\-]?[0-9\.,]+%?$/.test(s);
 
     for (const [label, value] of entries){
       if (label === "" && value === null){ lines.push(''); continue; }
@@ -124,7 +143,7 @@
     return lines.join('\n');
   }
 
-  // Main compute routine porting Worksheet1B.FillForm
+  // Fill out the pub 15-T Worksheet 1B
   function computeWorksheet(opts){
     const taxYear = opts.taxYear;
     const filingStatus = opts.filingStatus === 'MarriedFilingSeparately' ? 'Single' : opts.filingStatus;
@@ -289,7 +308,7 @@
       else { w4pPanel.classList.add('hidden'); noW4pPanel.classList.remove('hidden'); }
     });
     
-    const out = el('outputBox');
+    const out = el('worksheetTA');
     if (out) {
       out.addEventListener('input', () => autosizeTextarea(out));
       autosizeTextarea(out);
@@ -328,9 +347,9 @@
         };
 
         const result = computeWorksheet(opts);
-        el('outputBox').value = result.text;
+        el('worksheetTA').value = result.text;
         el('withholdingAmount').textContent = currency(result.L4c);
-        autosizeTextarea(el('outputBox'));
+        autosizeTextarea(el('worksheetTA'));
       } catch (err) {
         alert('Failed to compute: ' + (err && err.message ? err.message : String(err)));
       }

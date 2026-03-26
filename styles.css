@@ -19,34 +19,81 @@ body{
   color:#111;
 }
 
+/* mobile layout */
 .container{
   display:grid;
-  grid-template-columns: 300px 1fr;
+  grid-columns: 1fr;
+  grid-template-rows: 40 575px 1fr 1fr;
+  grid-template-areas: 
+   "header"
+   "form"
+   "results"
+   "sidebar";
   gap:var(--gap);
   align-items:start;
+  justify-items: center;
   min-height: calc(100vh - 48px);
 }
 
-.inputs {
-  grid-column: 1;
-  display:flex;
-  flex-direction:column;
-  gap:var(--gap);
+/* desktop layout */
+@media (min-width: 768px) {
+  .container {
+    display:grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 40px 575px 1fr;
+    grid-template-areas: 
+     "header header"
+     "form sidebar"
+     "results sidebar";
+    gap:var(--gap);
+    align-items: center;
+    min-height: calc(100vh - 48px);
+  }
+  .results-detail {
+	grid-area: sidebar;
+	min-height: 0;
+	align-self: start;
+	justify-self: stretch;
+	overflow: auto;
+  }
 }
-.outputs {
-  grid-column: 2;
+
+.header { grid-area: header; }
+.inputs {
+  grid-area: form;
+  /*grid-column: 1;*/
   display:flex;
   flex-direction:column;
   gap:var(--gap);
-  align-items: stretch;
+  max-width:350px;
+}
+.outputs {   
+  grid-area: results;
+  display:flex;
+  flex-direction:column;
+  gap:var(--gap);
+  align-self: start;
   margin-top: 6px;
   min-height: 0;
+  max-width: 350px;
+}
+.results-detail {
+  grid-area: sidebar;
+  min-height: 0;
+  width: auto;
+  align-self: start;
+  justify-items: end;
+  overflow: auto;
+  background:var(--panel-bg);
+  border-radius:var(--br);
+  font-size: small;
+  font-family: Consolas, monospace;
 }
 
 h1{ margin:0 0 12px 0; font-size:1.1rem; text-align: center;white-space: nowrap;}
 legend{ white-space: nowrap; overflow: hidden;}
 
-.filing-info{ display:flex; gap:12px; margin-bottom:0px; align-items:center; }
+.filing-info{ display:flex; gap:12px; margin-bottom:0px; align-self:center; }
 .filing-info label{ display:flex; flex-direction:column; font-size:0.9rem; }
 
 .pension-info{ 
@@ -71,13 +118,9 @@ legend{ white-space: nowrap; overflow: hidden;}
 .result{ font-weight: 500; border-radius: var(--br); border-style: solid; background:var(--panel-bg);}
 .currency{ font-weight:200; margin-top:6px; }
 
-.outputs label {
-  font-size:1rem;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
 #result-text {
+  width: 552px;
+  justify-self: center;
   border-radius: var(--br);
   border-style: solid;
   background:var(--panel-bg);
@@ -92,17 +135,18 @@ legend{ white-space: nowrap; overflow: hidden;}
   background: #007bff;
 }
 #toggle { display:none; }
-#toggle:checked + #outputBox {
+#toggle:checked + #worksheetTA {
+  opacity: 0;
   max-height: 0;
   overflow: hidden;
-  opacity: 0;
   transition: all 0.3s ease;
 }
-#outputBox {
+#worksheetTA {
   opacity: 1;
   flex: 1 1 auto; 
   min-height: 0;
   max-height: 1000px;
+  justify-self: center;
   width: 100%;
   white-space: pre;
   font-family: Consolas, monospace;

@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -7,8 +7,8 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>Withholding Calculator for Pensions and Annuities (W-4P)</h1>
   <main class="container">
+    <h1 class="header">Withholding Calculator for Pensions and Annuities (W-4P)</h1>
 
     <div class="inputs">
       <section class="filing-info">
@@ -51,7 +51,7 @@
       <fieldset class="w4p-section">
         <legend>Form W-4P Information</legend>
         <label class="checkbox">
-          <input id="hasW4P" type="checkbox" checked /> Using a 2022-or-later Form W-4P
+          <input id="hasW4P" type="checkbox" checked="true" /> Using a 2022-or-later Form W-4P
         </label>
 
         <div id="w4pPanel" class="panel">
@@ -89,10 +89,15 @@
         <legend>Computed Withholding Result </legend>
         <span id="withholdingAmount" class="currency">0.00</span>
       </fieldset>
+    </div>
+
+    <div class="results-detail">
       <fieldset id="result-text">
-        <legend><label for="toggle">Completed Worksheet</label></legend>
+        <legend>
+          <label for="toggle">Completed Worksheet</label>
+        </legend>
         <input id="toggle" type="checkbox" checked="false"/>
-        <textarea id="outputBox" readonly></textarea>
+        <textarea id="worksheetTA" readonly="true"></textarea>
       </fieldset>
     </div>
 
