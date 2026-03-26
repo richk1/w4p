@@ -25,7 +25,7 @@ body {
 .container {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 40px 575px 1fr 1fr;
+  grid-template-rows: fit-content(40px) fit-content(575px) fit-content() 1fr;
   grid-template-areas:
     "header"
     "form"
@@ -41,7 +41,7 @@ body {
 @media (min-width: 768px) {
   .container {
     grid-template-columns: 300px 1fr;
-    grid-template-rows: 40px 575px 1fr;
+    grid-template-rows: fit-content(40px) fit-content(575px) 1fr;
     grid-template-areas:
       "header header"
       "form sidebar"
@@ -234,7 +234,7 @@ legend { white-space: nowrap; overflow: hidden; }
   width: 100%;
   white-space: pre;
   font-family: Consolas, "Courier New", monospace;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   background: #fafafa;
   border: none;
   padding: 8px;
