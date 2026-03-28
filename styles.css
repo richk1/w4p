@@ -176,6 +176,7 @@ legend { white-space: nowrap; overflow: hidden; }
   border: var(--border);
   background: var(--panel-bg);
   padding: 8px;
+  text-align: center;
 }
 
 .currency { font-weight: 200; margin-top: 6px; }
@@ -200,6 +201,9 @@ legend { white-space: nowrap; overflow: hidden; }
   cursor: pointer;
   user-select: none;
   background: #007bff;
+}
+#withholdingAmount {
+  font-weight: bold;
 }
 
 /* Accessible hide for toggle input while preserving functionality */
