@@ -35,6 +35,17 @@ import { computeWorksheet } from './withholding-calc.js';
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 'px';
   }
+  function scheduleAutosize(textarea) {
+    if (!textarea) return;
+    // If rAF is available, schedule a read/write in the next frame.
+    // This prevents forced layout during DOMContentLoaded when styles may not be applied yet.
+    if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(() => autosizeTextarea(textarea));
+    } else {
+      // fallback
+      setTimeout(() => autosizeTextarea(textarea), 0);
+    }
+  }
 
   // Input validation helpers for dollar/cents inputs -----------------------------------
 
@@ -108,7 +119,8 @@ import { computeWorksheet } from './withholding-calc.js';
 
     if (worksheetTA) {
       worksheetTA.addEventListener('input', () => autosizeTextarea(worksheetTA));
-      autosizeTextarea(worksheetTA);
+      // scheduleAutosize to avoid forcing layout during load / stylesheet parsing
+      scheduleAutosize(worksheetTA);
     }
 
     computeBtn.addEventListener('click', () => {
@@ -170,7 +182,7 @@ import { computeWorksheet } from './withholding-calc.js';
         const result = computeWorksheet(opts);
         if (worksheetTA) {
           worksheetTA.value = result.text;
-          autosizeTextarea(worksheetTA);
+          scheduleAutosize(worksheetTA);
         }
         const withholdingAmountEl = el('withholdingAmount');
         if (withholdingAmountEl) withholdingAmountEl.textContent = currency(result.L4c);

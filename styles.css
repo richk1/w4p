@@ -17,15 +17,15 @@ body {
   margin: 24px;
   background: #fff;
   color: #111;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased; /* for better font rendering on WebKit browsers */
+  -moz-osx-font-smoothing: grayscale; /* for better font rendering on macOS */
 }
 
 /* Mobile-first grid layout */
 .container {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: fit-content(40px) fit-content(575px) fit-content() 1fr;
+  grid-template-rows: fit-content(40px) fit-content(575px) fit-content(60px) 1fr;
   grid-template-areas:
     "header"
     "form"
@@ -60,7 +60,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--gap);
-  max-width: 350px;
+  /*max-width: 350px;*/
   width: 100%;
 }
 
@@ -72,7 +72,6 @@ body {
   align-self: start;
   margin-top: 6px;
   min-height: 0;
-  max-width: 350px;
   width: 100%;
 }
 
@@ -84,16 +83,15 @@ body {
   align-self: start;
   justify-self: stretch;
   overflow: auto;
-  background: var(--panel-bg);
   border-radius: var(--br);
   font-size: 0.875rem;
   font-family: Consolas, "Courier New", monospace;
-  padding: 8px;
+  padding: 0;
 }
 
 /* Typographic utilities */
 h1 {
-  margin: 0 0 12px 0;
+  margin: 0;
   font-size: 1.1rem;
   text-align: center;
   white-space: nowrap;
@@ -106,21 +104,20 @@ legend { white-space: nowrap; overflow: hidden; }
   display: flex;
   gap: var(--gap);
   margin-bottom: 0;
-  align-self: center;
+  justify-content: center;
 }
 .filing-info label { display: flex; flex-direction: column; font-size: 0.9rem; }
 
 .pension-info {
-  padding: 10px;
-  background: var(--panel-bg);
-  border-radius: var(--br);
-  margin-bottom: 8px;
+  display: flex;
+  gap: var(--gap);
+  justify-content: center;
   font-size: 0.875rem;
 }
 .pension-info label {
-  margin-right: 12px;
-  display: inline-block;
-  max-width: 100px;
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
 }
 #paymentAmount { max-width: 100%; }
 
@@ -152,6 +149,7 @@ legend { white-space: nowrap; overflow: hidden; }
   align-items: center;
   gap: var(--gap);
   font-weight: 600;
+  accent-color: var(--accent);
 }
 
 /* Primary control */
@@ -191,6 +189,7 @@ legend { white-space: nowrap; overflow: hidden; }
   border: var(--border);
   background: var(--panel-bg);
   padding: 8px;
+  margin:0;
 }
 
 #result-text legend label {
@@ -246,5 +245,5 @@ legend { white-space: nowrap; overflow: hidden; }
 /* Small responsive tweaks */
 @media (max-width: 420px) {
   .inputs, .outputs { max-width: 100%; }
-  .results-detail { padding: 6px; }
+  .results-detail { padding: 0; }
 }
